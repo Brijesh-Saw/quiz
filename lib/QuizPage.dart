@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:quiz/ResultPage.dart';
 
 class loadjson extends StatelessWidget {
-  String langname;
+  final String langname;
   loadjson(this.langname);
   String assettoload;
   setasset() {
@@ -19,8 +19,10 @@ class loadjson extends StatelessWidget {
       assettoload = "assets/js.json";
     } else if (langname == "C++") {
       assettoload = "assets/cpp.json";
-    } else {
+    } else if (langname == "Linux") {
       assettoload = "assets/linux.json";
+    } else {
+      assettoload = "";
     }
   }
 
@@ -57,9 +59,10 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   List mydata;
   _QuizPageState({this.mydata});
+
   bool canceltimer = false, disableAnswer = false;
   String showtimer = "30";
-  var random_array;
+  var randomArray;
   int j = 1, marks = 0, timer = 30, i = 1;
   Color colortoshow = Colors.indigoAccent;
   Color right = Colors.green;
@@ -75,16 +78,16 @@ class _QuizPageState extends State<QuizPage> {
   genrandomarray() {
     var distinctIds = [];
     var rand = new Random();
-    for (int i = 0;;) {
+    for (int x = 0;; x++) {
       distinctIds.add(rand.nextInt(10));
-      random_array = distinctIds.toSet().toList();
-      if (random_array.length < 10) {
+      randomArray = distinctIds.toSet().toList();
+      if (randomArray.length < 10) {
         continue;
       } else {
         break;
       }
     }
-    print(random_array);
+    print(randomArray);
   }
 
   @override
@@ -119,12 +122,12 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   void nextquestion() {
-    disableAnswer = false;
-    canceltimer = false;
-    timer = 30;
     setState(() {
+      canceltimer = false;
+      disableAnswer = false;
+      timer = 30;
       if (j < 10) {
-        i = random_array[j];
+        i = (randomArray[j] + 1);
         j++;
       } else {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -221,7 +224,7 @@ class _QuizPageState extends State<QuizPage> {
                 padding: EdgeInsets.all(15.0),
                 alignment: Alignment.bottomLeft,
                 child: Text(
-                  mydata[0][i.toString()],
+                  '$i. ${mydata[0][i.toString()]}',
                   style: TextStyle(
                     fontSize: 16.0,
                     fontFamily: "Quando",
